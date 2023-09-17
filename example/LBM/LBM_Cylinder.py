@@ -5,7 +5,7 @@ from numpy import *
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-from core.LBM.LBM import LBM
+from src.LBM.LBM import LBM
 
 
 if __name__== "__main__" :
