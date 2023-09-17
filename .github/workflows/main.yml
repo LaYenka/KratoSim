@@ -1,0 +1,16 @@
+stages:
+  - build
+  - test
+
+build-code-job:
+  stage: build
+  script:
+    - echo "Check the python version, then build python environment:"
+    - python --version
+    - python -m pip install -r requirements
+
+test-code-job1:
+  stage: test
+  script:
+    - echo "If the files are built successfully, test some files with one command:"
+    - python -c "import numpy"
