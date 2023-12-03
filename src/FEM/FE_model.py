@@ -1,7 +1,7 @@
 #-------------------------------------------------------
 #  Generate FE Model
 # 
-#
+#-------------------------------------------------------
 
 import numpy as np
 import math
@@ -26,7 +26,7 @@ class FE_model(read_mesh,shapefun,FE_forcing,Stiffness,FE_PostProcessing):
 
     # Gauss points
     self.q4 = np.array([[-1,-1],[1,-1],[-1,1],[1,1]]) / math.sqrt(3.0)
-    self.q2 = np.array([[1.0],[-1.0]]) / math.sqrt(3.0)
+    self.q2 = np.array([[-1.0],[1.0]]) / math.sqrt(3.0)         # 0.5 factor scaling the interval [-1,1] to [0,1] reflected in the integral
 
     
     # overall variables

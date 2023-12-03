@@ -86,7 +86,7 @@ class read_mesh:
 				# read 1D elements
 				if len(values) == 3:
 
-					self.mesh_dict["shape_fun"].append("linear_1D")  # populate dictionary: shape function name
+					self.mesh_dict["shape_fun"].append("beam_1D")  # populate dictionary: shape function name
 
 					n1 = int(values[1]) - 1  # zero indexed
 					n2 = int(values[2]) - 1
