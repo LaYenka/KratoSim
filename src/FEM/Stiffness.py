@@ -51,17 +51,17 @@ class Stiffness():
 		#               [0.033, 0.066],
 		#               [0.0,   0.066]]
 			c = self.conn[n_el-1]        # connectivtiy
-			nodePts = self.nodes[c,:]    # extract node coordinates
+			node_pts = self.nodes[c,:]    # extract node coordinates
 			self.shape_f=getattr(shapefun,self.mesh_dict['shape_fun'][n_el-1])
 
-			if len(nodePts) == 4:
+			if len(node_pts) == 4:
 				B = np.zeros((3,8))     # 
 				Ke = np.zeros((8,8))    # element stiffness matrix is 8x8
 				for q in self.q4:		# for each Gauss point
 					# q is 1x2, N(xi,eta)
 					# dN = self.gradshapefun(q)    # partial derivative of N wrt (xi,eta): 2x4
 					N,dN = self.shape_f(q)         # shape function N and partial derivatives dN
-					J  = np.dot(dN, nodePts).T     # Jacobian - J is 3x8
+					J  = np.dot(dN, node_pts).T     # Jacobian - J is 3x8
 					dN = np.dot(np.linalg.inv(J), dN)    # partial derivative of N wrt (x,y): 2x4
 					# assemble B matrix  [3x8]
 					B[0,0::2] = dN[0,:]
@@ -71,7 +71,7 @@ class Stiffness():
 					# element stiffness matrix (8X8)
 					Ke += np.dot(np.dot(B.T,self.C),B) * np.linalg.det(J)
 
-			if len(nodePts) == 2:
+			if len(node_pts) == 2:
 				B = np.zeros((1,4))     # 
 				Rot = np.identity(4)
 				Ke = np.zeros((4,4))    # element stiffness matrix is 4x4
@@ -80,8 +80,8 @@ class Stiffness():
 					# q is 1x2, N(xi,eta)
 					# dN = self.gradshapefun(q)    # partial derivative of N wrt (xi): 1x4
 					N,dN = self.shape_f(q)         # N and partial derivatives dN
-					J  = np.dot(dN[0::2].T, nodePts).T     # Jacobian - J is 4x4
-					L = np.linalg.norm(nodePts[1,:]-nodePts[0,:])
+					J  = np.dot(dN[0::2].T, node_pts).T     # Jacobian - J is 4x4
+					L = np.linalg.norm(node_pts[1,:]-node_pts[0,:])
 					# print(L,q)
 					# integral factor scaling from [-1,1] -> Gauss formula to [0,1] reference element
 					fact_int_gauss = 0.5
@@ -93,9 +93,9 @@ class Stiffness():
 					B[0,3] = (3*q+1)/L
 					# compute rotation matrxi to orientate element
 					## cos = x/L 
-					lox=(nodePts[1,0]-nodePts[0,0])/L
+					lox=(node_pts[1,0]-node_pts[0,0])/L
 					## sin = y/L
-					mox=(nodePts[1,1]-nodePts[0,1])/L
+					mox=(node_pts[1,1]-node_pts[0,1])/L
 					# element stiffness matrix - bending (4X4)
 					Ke += fact_int_gauss*np.dot(np.dot(B.T,self.C_beam),B)
 					# print(Ke)
@@ -107,7 +107,7 @@ class Stiffness():
 					Rot[1,1] = 1
 					Rot[2,2] = lox
 					Rot[3,3] = 1
-					# Rotate Global matrix
+					#  Rotate Global matrix
 					Ke = np.dot(np.dot(Rot.T,Ke),Rot)
 
 
